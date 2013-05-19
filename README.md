@@ -1,4 +1,4 @@
-# Concrete
+# Concrete [![endorse](https://api.coderwall.com/runexec/endorsecount.png)](https://coderwall.com/runexec)
 
 Retrieve the source body of a binding
 
@@ -44,7 +44,7 @@ Lein deps
 
 ```clojure
 [concrete/concrete "0.1.0-SNAPSHOT"]
-
+```
 
 ## License
 
