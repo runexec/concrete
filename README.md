@@ -16,20 +16,19 @@ user> (doseq [_ (body concrete.core build-code-blocks)] (println _))
 (defn build-code-blocks
   "load-file on ns to build source blocks."
   [ns-symbol]
-  (let [code-blocks (atom [])]
-    (load-file (guess-src-path ns-symbol))
-    ;; build blocks
-    (let [ls (ns-to-line-seq ns-symbol)]
-      (doseq [[s e] (start-and-stops ns-symbol)
-              :let [_ (apply str
-                             (interpose "\n" (line-seq-range ls s e)))
-                    action (partial swap! code-blocks conj)]]
-        (action {:body _}))
-      (swap! code-blocks
-             (fn [x] 
-               (map #(assoc %1 :meta %2)
-                    x
-                    (map #(meta %) (get-symbols ns-symbol))))))))
+  (load-file (guess-src-path ns-symbol))
+  (let [ls (ns-to-line-seq ns-symbol)
+        code-blocks (atom [])]
+    (doseq [[s e] (start-and-stops ns-symbol)
+            :let [_ (apply str
+                           (interpose "\n" (line-seq-range ls s e)))
+                  action (partial swap! code-blocks conj)]]
+      (action {:body _}))
+    (swap! code-blocks
+           (fn [x] 
+             (map #(assoc %1 :meta %2)
+                  x
+                  (map #(meta %) (get-symbols ns-symbol)))))))
 nil
 ```
 
